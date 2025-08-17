@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语演讲稿感情因素评分工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#F5F5F7',
+                        accent: '#EC4899',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .shadow-soft {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .btn-effect {
+                transition: all 0.3s ease;
+            }
+            .btn-effect:hover {
+                transform: translateY(-2px);
+            }
+            .btn-effect:active {
+                transform: translateY(1px);
+            }
+            .progress-bar {
+                height: 8px;
+                border-radius: 4px;
+                transition: width 1s ease-in-out;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 标题区域 -->
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-900 mb-3">英语演讲稿感情因素评分工具</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">评估演讲中的积极情感、呼吁性及情感连贯性，提供量化评分和改进建议</p>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 输入区域 -->
+            <section class="bg-white rounded-xl shadow-soft p-6">
+                <h2 class="text-xl font-semibold mb-4 flex items-center text-primary">
+                    <i class="fa fa-file-text-o mr-2"></i>输入演讲稿
+                </h2>
+                <div class="mb-6">
+                    <textarea 
+                        id="speechInput" 
+                        class="w-full h-80 p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all resize-none"
+                        placeholder="请在此输入英语演讲稿内容..."
+                    ></textarea>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button 
+                        id="resetBtn" 
+                        class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg shadow-soft btn-effect"
+                    >
+                        <i class="fa fa-refresh mr-2"></i>重置
+                    </button>
+                    <button 
+                        id="analyzeBtn" 
+                        class="flex-1 px-6 py-3 bg-primary text-white rounded-lg shadow-soft btn-effect"
+                    >
+                        <i class="fa fa-line-chart mr-2"></i>分析评分
+                    </button>
+                </div>
+            </section>
+
+            <!-- 结果展示区域 -->
+            <section class="bg-white rounded-xl shadow-soft p-6">
+                <h2 class="text-xl font-semibold mb-6 flex items-center text-primary">
+                    <i class="fa fa-star-o mr-2"></i>评分结果
+                </h2>
+                
+                <div id="resultArea" class="min-h-80">
+                    <div class="text-center text-gray-500 py-16">
+                        <i class="fa fa-bar-chart text-5xl mb-4 opacity-30"></i>
+                        <p>请输入演讲稿并点击"分析评分"按钮获取结果</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 评分标准说明 -->
+        <section class="mt-10 bg-white rounded-xl shadow-soft p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center text-primary">
+                <i class="fa fa-list-alt mr-2"></i>评分标准
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="font-medium text-lg mb-2 text-gray-800">积极情感表达 (7分)</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li>包含乐观、鼓舞、希望等积极情绪的表达</li>
+                        <li>使用积极词汇和正面表述</li>
+                        <li>能激发听众的积极情绪</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-lg mb-2 text-gray-800">呼吁与行动导向 (7分)</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li>明确的呼吁性语言</li>
+                        <li>能激发听众采取行动的意愿</li>
+                        <li>呼吁内容具体、可行</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-lg mb-2 text-gray-800">情感连贯性 (6分)</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li>情感表达与主题一致</li>
+                        <li>情感转换自然流畅</li>
+                        <li>整体情感基调适合演讲主题</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>本工具仅供教学使用，此评分结果仅供参考。</p>
+            <p class="mt-2">Powered by Github, Copyright@PERRY.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const speechInput = document.getElementById('speechInput');
+            const resultArea = document.getElementById('resultArea');
+            const resetBtn = document.getElementById('resetBtn');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            // 积极情感词汇库
+            const positiveWords = [
+                'great', 'excellent', 'wonderful', 'happy', 'joy', 'success', 'achieve', 
+                'overcome', 'hope', 'bright', 'strong', 'brave', 'proud', 'confident',
+                'unite', 'together', 'prosper', 'grow', 'improve', 'opportunity', 'potential'
+            ];
+            
+            // 呼吁性词汇库
+            const callToActionWords = [
+                'let us', 'we must', 'together we can', 'join', 'unite', 'act', 
+                'take action', 'support', 'stand up', 'fight for', 'make a difference',
+                'change', 'create', 'build', 'work together', 'let\'s'
+            ];
+            
+            // 重置按钮功能
+            resetBtn.addEventListener('click', function() {
+                speechInput.value = '';
+                resultArea.innerHTML = `
+                    <div class="text-center text-gray-500 py-16">
+                        <i class="fa fa-bar-chart text-5xl mb-4 opacity-30"></i>
+                        <p>请输入演讲稿并点击"分析评分"按钮获取结果</p>
+                    </div>
+                `;
+            });
+            
+            // 分析评分按钮功能
+            analyzeBtn.addEventListener('click', function() {
+                const text = speechInput.value.trim();
+                
+                if (!text) {
+                    resultArea.innerHTML = `
+                        <div class="text-center text-red-500 py-16">
+                            <i class="fa fa-exclamation-circle text-5xl mb-4"></i>
+                            <p>请先输入演讲稿内容</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 显示加载状态
+                resultArea.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fa fa-circle-o-notch fa-spin text-5xl mb-4 text-primary"></i>
+                        <p>正在分析演讲稿中的情感因素...</p>
+                    </div>
+                `;
+                
+                // 模拟分析延迟
+                setTimeout(() => {
+                    const analysisResult = analyzeSpeech(text);
+                    displayResults(analysisResult);
+                }, 1500);
+            });
+            
+            // 分析演讲稿情感因素
+            function analyzeSpeech(text) {
+                // 将文本转换为小写以便匹配
+                const lowerText = text.toLowerCase();
+                
+                // 计算积极情感得分（满分7分）
+                const positiveCount = countWordMatches(lowerText, positiveWords);
+                const positiveScore = calculateScore(positiveCount, 7, 15); // 最多匹配15个词
+                
+                // 计算呼吁性得分（满分7分）
+                const callCount = countWordMatches(lowerText, callToActionWords);
+                const callScore = calculateScore(callCount, 7, 8); // 最多匹配8个词
+                
+                // 计算情感连贯性得分（满分6分）
+                const coherenceScore = calculateCoherenceScore(text, positiveCount);
+                
+                // 计算总分（满分20分）
+                const totalScore = Math.round((positiveScore + callScore + coherenceScore) * 10) / 10;
+                
+                // 生成评价
+                const positiveEval = generateEvaluation(positiveScore, 7, "积极情感表达");
+                const callEval = generateEvaluation(callScore, 7, "呼吁与行动导向");
+                const coherenceEval = generateEvaluation(coherenceScore, 6, "情感连贯性");
+                
+                // 生成建议
+                const suggestions = generateSuggestions(positiveScore, callScore, coherenceScore);
+                
+                return {
+                    positive: { score: Math.round(positiveScore * 10) / 10, count: positiveCount, evaluation: positiveEval },
+                    callToAction: { score: Math.round(callScore * 10) / 10, count: callCount, evaluation: callEval },
+                    coherence: { score: Math.round(coherenceScore * 10) / 10, evaluation: coherenceEval },
+                    total: totalScore,
+                    suggestions: suggestions
+                };
+            }
+            
+            // 计算词汇匹配数量
+            function countWordMatches(text, wordList) {
+                let count = 0;
+                wordList.forEach(word => {
+                    // 使用正则表达式匹配整个单词
+                    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                    const matches = text.match(regex);
+                    if (matches) count += matches.length;
+                });
+                return count;
+            }
+            
+            // 计算得分
+            function calculateScore(count, maxScore, maxCount) {
+                // 得分与匹配数量成正比，但不超过该维度满分
+                const score = (count / maxCount) * maxScore;
+                return Math.min(score, maxScore);
+            }
+            
+            // 计算情感连贯性得分（满分6分）
+            function calculateCoherenceScore(text, positiveCount) {
+                // 基于文本长度、段落数量和情感词分布计算
+                const paragraphCount = text.split(/\n+/).filter(p => p.trim()).length;
+                const wordCount = text.split(/\s+/).filter(w => w).length;
+                
+                // 基础分（满分6分制调整）
+                let score = 3;
+                
+                // 根据段落数量调整（段落适中得分高）
+                if (paragraphCount >= 3 && paragraphCount <= 6) score += 1.5;
+                else if (paragraphCount >= 2 && paragraphCount <= 7) score += 0.8;
+                
+                // 根据文本长度调整
+                if (wordCount >= 100 && wordCount <= 500) score += 1.5;
+                else if (wordCount >= 50 && wordCount <= 600) score += 0.7;
+                
+                return Math.min(score, 6);
+            }
+            
+            // 生成评价（基于各维度满分）
+            function generateEvaluation(score, maxScore, dimension) {
+                const percentage = (score / maxScore) * 100;
+                
+                if (percentage >= 80) { // 优秀
+                    return `${dimension}优秀，能有效传递情感并引起共鸣。`;
+                } else if (percentage >= 60) { // 良好
+                    return `${dimension}良好，情感表达较为恰当，但仍有提升空间。`;
+                } else if (percentage >= 40) { // 一般
+                    return `${dimension}一般，情感表达不够充分，需要加强。`;
+                } else if (percentage >= 20) { // 较差
+                    return `${dimension}较差，情感表达薄弱，难以引起听众共鸣。`;
+                } else { // 不足
+                    return `${dimension}不足，缺乏有效的情感表达。`;
+                }
+            }
+            
+            // 生成建议
+            function generateSuggestions(positiveScore, callScore, coherenceScore) {
+                const suggestions = [];
+                
+                if (positiveScore < 5.6) { // <80% of 7
+                    suggestions.push("可以增加更多积极、鼓舞人心的词汇和表达，增强演讲的感染力。");
+                }
+                
+                if (callScore < 5.6) { // <80% of 7
+                    suggestions.push("加强呼吁性语言的使用，明确表达希望听众采取的行动。");
+                }
+                
+                if (coherenceScore < 4.8) { // <80% of 6
+                    suggestions.push("注意情感表达的连贯性，确保情感转换自然，与主题保持一致。");
+                }
+                
+                // 如果所有维度都很好
+                if (suggestions.length === 0) {
+                    suggestions.push("演讲的情感表达整体优秀，各维度平衡得当，能有效引起听众共鸣。");
+                }
+                
+                return suggestions;
+            }
+            
+            // 显示分析结果
+            function displayResults(result) {
+                let html = `
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold mb-2">总分: ${result.total}/20</h3>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="progress-bar bg-primary" style="width: ${(result.total/20)*100}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">
+                            ${result.total >= 16 ? "优秀：情感表达丰富，能有效打动听众" :
+                              result.total >= 12 ? "良好：情感表达得当，有较好的感染力" :
+                              result.total >= 8 ? "一般：情感表达基本合理，但缺乏力度" :
+                              result.total >= 4 ? "较差：情感表达薄弱，难以引起共鸣" :
+                              "不足：缺乏有效的情感表达"}
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                `;
+                
+                // 积极情感结果
+                html += `
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <h3 class="font-medium">积极情感表达: ${result.positive.score}/7</h3>
+                            <span class="text-sm text-gray-500">检测到 ${result.positive.count} 个积极词汇</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                            <div class="progress-bar bg-green-500" style="width: ${(result.positive.score/7)*100}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">${result.positive.evaluation}</p>
+                    </div>
+                `;
+                
+                // 呼吁性结果
+                html += `
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <h3 class="font-medium">呼吁与行动导向: ${result.callToAction.score}/7</h3>
+                            <span class="text-sm text-gray-500">检测到 ${result.callToAction.count} 个呼吁性表达</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                            <div class="progress-bar bg-accent" style="width: ${(result.callToAction.score/7)*100}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">${result.callToAction.evaluation}</p>
+                    </div>
+                `;
+                
+                // 情感连贯性结果
+                html += `
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <h3 class="font-medium">情感连贯性: ${result.coherence.score}/6</h3>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                            <div class="progress-bar bg-blue-500" style="width: ${(result.coherence.score/6)*100}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">${result.coherence.evaluation}</p>
+                    </div>
+                `;
+                
+                // 建议部分
+                html += `
+                    <div class="mt-6 p-4 bg-secondary rounded-lg">
+                        <h3 class="font-medium mb-3">改进建议:</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                `;
+                
+                result.suggestions.forEach(suggestion => {
+                    html += `<li>${suggestion}</li>`;
+                });
+                
+                html += `
+                        </ul>
+                    </div>
+                </div>
+                `;
+                
+                resultArea.innerHTML = html;
+                
+                // 动画效果 - 延迟启动进度条动画
+                setTimeout(() => {
+                    const progressBars = document.querySelectorAll('.progress-bar');
+                    progressBars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
